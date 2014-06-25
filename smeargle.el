@@ -26,14 +26,23 @@
 
 (require 'cl-lib)
 
-(defvar smeargle--color
-  '((older-than-3day . "grey5")
+(defgroup smeargle nil
+  "Highlight regions by last updated time."
+  :group 'vc)
+
+(defcustom smeargle-colors
+  '((older-than-1day . nil)
+    (older-than-3day . "grey5")
     (older-than-1week . "grey10")
     (older-than-2week . "grey15")
     (older-than-1month . "grey20")
     (older-than-3month . "grey25")
     (older-than-6month . "grey30")
-    (older-than-1year . "grey35")))
+    (older-than-1year . "grey35"))
+  "Alist of last updated era and background color."
+  :type '(repeat (cons (symbol :tag "How old")
+                       (string :tag "Background color name")))
+  :group 'smeargle)
 
 (defun smeargle--updated-era (now updated-date)
   (let* ((delta (decode-time (time-subtract now updated-date)))
@@ -82,7 +91,7 @@
         (dolist (info update-info)
           (let ((start-line (plist-get info :start))
                 (end-line (1+ (plist-get info :end)))
-                (color (assoc-default (plist-get info :type) smeargle--color))
+                (color (assoc-default (plist-get info :type) smeargle-colors))
                 start)
             (forward-line (- start-line curline))
             (setq start (point))
