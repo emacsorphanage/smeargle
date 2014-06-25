@@ -26,6 +26,26 @@ Highlight regions
 Clear overlays in current buffer
 
 
+## Customize
+
+You can set highlighted colors by changing `smeargle-colors`.
+For example
+
+```lisp
+(custom-set-variables
+ '(smeargle-colors '((older-than-1day   . "red")
+                     (older-than-3day   . "green")
+                     (older-than-1week  . "yellow")
+                     (older-than-2week  . nil)
+                     (older-than-1month . "orange")
+                     (older-than-3month . "pink")
+                     (older-than-6month . "cyan")
+                     (older-than-1year . "grey50"))))
+```
+
+If `color` parameter is `nil`, that part is not highlighted.
+
+
 ## Sample Configuration
 
 ```lisp
