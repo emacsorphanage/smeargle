@@ -31,6 +31,9 @@ Clear overlays in current buffer
 ```lisp
 (global-set-key (kbd "C-x v s") 'smeargle)
 
+;; Highlight regions at opening file
+(add-hook 'find-file-hook 'smeargle)
+
 ;; Updating after save buffer
 (add-hook 'after-save-hook 'smeargle)
 ```
