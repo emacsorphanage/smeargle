@@ -53,9 +53,10 @@
           ((> delta-month 6) 'older-than-6month)
           ((> delta-month 3) 'older-than-3month)
           ((> delta-month 1) 'older-than-1month)
-          ((>= delta-day 14) 'older-than-2week)
-          ((>= delta-day 7) 'older-than-1week)
-          ((>= delta-day 3) 'older-than-3day))))
+          ((> delta-day 14) 'older-than-2week)
+          ((> delta-day 7) 'older-than-1week)
+          ((> delta-day 3) 'older-than-3day)
+          ((> delta-day 1) 'older-than-1day))))
 
 (defsubst smeargle--date-regexp (repo-type)
   (cl-case repo-type
