@@ -18,7 +18,11 @@ This is Emacs port of Vim's [smeargle](https://github.com/FriedSock/smeargle)
 
 #### `M-x smeargle`
 
-Highlight regions
+Highlight regions by last updated time.
+
+#### `M-x smeargle-age`
+
+Highlight regions by age of changes.
 
 
 #### `M-x smeargle-clear`
@@ -28,7 +32,7 @@ Clear overlays in current buffer
 
 ## Customize
 
-You can set highlighted colors by changing `smeargle-colors`.
+You can set highlighted colors of `smeargle` by changing `smeargle-colors`.
 For example
 
 ```lisp
@@ -44,6 +48,25 @@ For example
 ```
 
 If `color` parameter is `nil`, that part is not highlighted.
+
+And you can also set colors of `smeargle-age` by `smeargle-age-colors`.
+
+```lisp
+(custom-set-variables
+ '(smeargle-age-colors '((0 . nil)
+                         (1 . "grey80")
+                         (2 . "grey70")
+                         (3 . "grey60")
+                         (4 . "grey50")
+                         (5 . "grey40")
+                         (6 . "grey30")
+                         (7 . "grey20")
+                         (8 . "grey10"))))
+```
+
+You can specify paramters until `smeargle-age-threshold`. `age` is set
+to `smeargle-age-threshold` if actual age of changes is older than
+`smeargle-age-threshold`. Default value of `smeargle-age-threshold` is 7.
 
 
 ## Sample Configuration
