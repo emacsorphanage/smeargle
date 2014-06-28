@@ -44,6 +44,25 @@
                        (string :tag "Background color name")))
   :group 'smeargle)
 
+(defcustom smeargle-age-colors
+  '((0 . nil)
+    (1 . "grey5")
+    (2 . "grey10")
+    (3 . "grey15")
+    (4 . "grey20")
+    (5 . "grey25")
+    (6 . "grey30")
+    (7 . "grey30"))
+  "Alist of age of changes and background color."
+  :type '(repeat (cons (int :tag "Age of changes")
+                       (string :tag "Background color name")))
+  :group 'smeargle)
+
+(defcustom smeargle-age-threshold 7
+  "Threshould of age of changes"
+  :type 'integer
+  :group 'smeargle)
+
 (defun smeargle--updated-era (now updated-date)
   (let* ((delta (decode-time (time-subtract now updated-date)))
          (delta-year (- (nth 5 delta) 1970))
@@ -63,28 +82,40 @@
     (git "\\(\\S-+ \\S-+ \\S-+\\)\\s-+[1-9][0-9]*)")
     (mercurial "^\\(.+?\\): ")))
 
-(defun smeargle--parse-blame (proc repo-type)
-  (with-current-buffer (process-buffer proc)
-    (goto-char (point-min))
-    (let ((update-date-regexp (smeargle--date-regexp repo-type))
-          (now (current-time))
-          (curline 1)
-          start update-info last-update)
-      (while (re-search-forward update-date-regexp nil t)
-        (let* ((updated-date (date-to-time (match-string-no-properties 1)))
-               (update-era (smeargle--updated-era now updated-date)))
-          (when (and (not last-update) update-era)
-            (setq start curline last-update update-era))
-          (when (and last-update (not (eq last-update update-era)))
-            (push (list :start start :end (1- curline) :type last-update)
-                  update-info)
-            (setq start curline last-update update-era))
-          (cl-incf curline)
-          (forward-line 1)))
-      (push (list :start start :end curline :type last-update) update-info)
-      (reverse update-info))))
+(defsubst smeargle--compare-function (update-type)
+  (cl-case update-type
+    (by-age (lambda (a b) (= a b)))
+    (by-time (lambda (a b) (eq a b)))))
 
-(defun smeargle--highlight (update-info curbuf)
+(defsubst smeargle--retrieve-function (update-type)
+  (cl-case update-type
+    (by-age (lambda (_now time) (float-time time)))
+    (by-time (lambda (now time) (smeargle--updated-era now time)))))
+
+(defun smeargle--parse-blame (proc repo-type update-type)
+  (let ((cmp-fn (smeargle--compare-function update-type))
+        (retrieve-fn (smeargle--retrieve-function update-type)))
+    (with-current-buffer (process-buffer proc)
+      (goto-char (point-min))
+      (let ((update-date-regexp (smeargle--date-regexp repo-type))
+            (now (current-time))
+            (curline 1)
+            start update-info last-update)
+        (while (re-search-forward update-date-regexp nil t)
+          (let* ((updated-date (date-to-time (match-string-no-properties 1)))
+                 (update-era (funcall retrieve-fn now updated-date)))
+            (when (and (not last-update) update-era)
+              (setq start curline last-update update-era))
+            (when (and last-update (not (funcall cmp-fn last-update update-era)))
+              (push (list :start start :end (1- curline) :when last-update)
+                    update-info)
+              (setq start curline last-update update-era))
+            (cl-incf curline)
+            (forward-line 1)))
+        (push (list :start start :end curline :when last-update) update-info)
+        (reverse update-info)))))
+
+(defun smeargle--highlight (update-info curbuf colors)
   (with-current-buffer curbuf
     (save-excursion
       (goto-char (point-min))
@@ -92,7 +123,7 @@
         (dolist (info update-info)
           (let ((start-line (plist-get info :start))
                 (end-line (1+ (plist-get info :end)))
-                (color (assoc-default (plist-get info :type) smeargle-colors))
+                (color (assoc-default (plist-get info :when) colors))
                 start)
             (forward-line (- start-line curline))
             (setq start (point))
@@ -108,7 +139,28 @@
       (git `("git" "--no-pager" "blame" ,bufname))
       (mercurial `("hg" "blame" "-d" ,bufname)))))
 
-(defun smeargle--start-blame-process (repo-type proc-buf)
+(defun smeargle--sorted-date (update-info)
+  (let ((times (mapcar (lambda (c) (plist-get c :when)) update-info)))
+    (delete-dups times)
+    (cl-loop with hash = (make-hash-table :test 'equal)
+             for time in (sort times '>)
+             for age = 0 then (+ age 1)
+             do
+             (puthash time age hash)
+             finally return hash)))
+
+(defun smeargle--set-age (update-info)
+  (let ((age-info (smeargle--sorted-date update-info)))
+    (cl-loop for info in update-info
+             for d = (plist-get info :when)
+             for real-age = (gethash d age-info)
+             for age = (if (>= real-age smeargle-age-threshold)
+                           smeargle-age-threshold
+                         real-age)
+             do
+             (plist-put info :when age))))
+
+(defun smeargle--start-blame-process (repo-type proc-buf update-type)
   (let* ((curbuf (current-buffer))
          (cmds (smeargle--blame-command repo-type))
          (proc (apply 'start-process "smeargle" proc-buf cmds)))
@@ -117,8 +169,13 @@
      proc
      (lambda (proc _event)
        (when (eq (process-status proc) 'exit)
-         (let ((update-info (smeargle--parse-blame proc repo-type)))
-           (smeargle--highlight update-info curbuf)
+         (let ((update-info (smeargle--parse-blame proc repo-type update-type))
+               (colors (if (eq update-type 'by-time)
+                           smeargle-colors
+                         smeargle-age-colors)))
+           (when (eq update-type 'by-age)
+             (smeargle--set-age update-info))
+           (smeargle--highlight update-info curbuf colors)
            (kill-buffer proc-buf)))))))
 
 (defsubst smergle--process-buffer (bufname)
@@ -137,14 +194,20 @@
       (delete-overlay ov))))
 
 ;;;###autoload
-(defun smeargle ()
+(defun smeargle (&optional update-type)
   (interactive)
   (smeargle-clear)
   (let ((repo-type (smeargle--repo-type)))
     (unless repo-type
       (error "Here is not 'git' or 'mercurial' repository"))
     (smeargle--start-blame-process
-     repo-type (smergle--process-buffer (buffer-file-name)))))
+     repo-type (smergle--process-buffer (buffer-file-name))
+     (or update-type 'by-time))))
+
+;;;###autoload
+(defun smeargle-age ()
+  (interactive)
+  (smeargle 'by-age))
 
 (provide 'smeargle)
 
