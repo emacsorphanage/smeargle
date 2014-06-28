@@ -205,7 +205,7 @@
      (or update-type 'by-time))))
 
 ;;;###autoload
-(defun smeargle-age ()
+(defun smeargle-commits ()
   (interactive)
   (smeargle 'by-age))
 
