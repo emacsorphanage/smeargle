@@ -22,6 +22,10 @@
 
 ;;; Commentary:
 
+;; `smeargle' is Emacs port of Vim's smeargle. `smeargle' provides highlighting
+;; regions by last update time / age of commits. We can know which part is changed
+;; recently and which part is not changed recently.
+
 ;;; Code:
 
 (require 'cl-lib)
@@ -188,6 +192,7 @@
 
 ;;;###autoload
 (defun smeargle-clear ()
+  "Clear smeargle overlays in current buffer."
   (interactive)
   (dolist (ov (overlays-in (point-min) (point-max)))
     (when (overlay-get ov 'smeargle)
@@ -195,6 +200,7 @@
 
 ;;;###autoload
 (defun smeargle (&optional update-type)
+  "Highlight regions by last updated time."
   (interactive)
   (smeargle-clear)
   (let ((repo-type (smeargle--repo-type)))
@@ -206,6 +212,7 @@
 
 ;;;###autoload
 (defun smeargle-commits ()
+  "Highlight regions by age of commits."
   (interactive)
   (smeargle 'by-age))
 
