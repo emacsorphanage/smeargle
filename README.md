@@ -20,7 +20,7 @@ This is Emacs port of Vim's [smeargle](https://github.com/FriedSock/smeargle)
 
 Highlight regions by last updated time.
 
-#### `M-x smeargle-age`
+#### `M-x smeargle-commits`
 
 Highlight regions by age of changes.
 
@@ -49,7 +49,7 @@ For example
 
 If `color` parameter is `nil`, that part is not highlighted.
 
-And you can also set colors of `smeargle-age` by `smeargle-age-colors`.
+And you can also set colors of `smeargle-commits` by `smeargle-age-colors`.
 
 ```lisp
 (custom-set-variables
