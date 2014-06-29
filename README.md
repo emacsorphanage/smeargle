@@ -73,6 +73,7 @@ to `smeargle-age-threshold` if actual age of changes is older than
 
 ```lisp
 (global-set-key (kbd "C-x v s") 'smeargle)
+(global-set-key (kbd "C-x v c") 'smeargle-commits)
 
 ;; Highlight regions at opening file
 (add-hook 'find-file-hook 'smeargle)
