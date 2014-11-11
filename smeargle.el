@@ -167,7 +167,7 @@
 (defun smeargle--start-blame-process (repo-type proc-buf update-type)
   (let* ((curbuf (current-buffer))
          (cmds (smeargle--blame-command repo-type))
-         (proc (apply 'start-process "smeargle" proc-buf cmds)))
+         (proc (apply 'start-file-process "smeargle" proc-buf cmds)))
     (set-process-query-on-exit-flag proc nil)
     (set-process-sentinel
      proc
