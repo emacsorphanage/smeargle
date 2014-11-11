@@ -1,4 +1,7 @@
 Revision history for smeargle.el
 
+Revision 0.02 2014/11/1 syohex
+   - Fix for tramp
+
 Revision 0.01 2014/06/29 syohex
    - Initial release
