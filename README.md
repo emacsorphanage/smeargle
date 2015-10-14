@@ -1,4 +1,4 @@
-# smeargle.el
+# smeargle.el [![melpa badge][melpa-badge]][melpa-link] [![melpa stable badge][melpa-stable-badge]][melpa-stable-link]
 
 Highlighting regions by last updated time.
 Older updated region is highlighted whity, newer region is highlighted blackly.
@@ -12,7 +12,7 @@ This is Emacs port of Vim's [smeargle](https://github.com/FriedSock/smeargle)
 
 ## Installation
 
-You can install `smeargle` from [MELPA](http://melpa.milkbox.net/#/) with package.el.
+You can install `smeargle` from [MELPA](https://melpa.org/) with package.el.
 
 
 ## Support VCS
@@ -70,7 +70,7 @@ And you can also set colors of `smeargle-commits` by `smeargle-age-colors`.
                          (8 . "grey10"))))
 ```
 
-You can specify paramters until `smeargle-age-threshold`. `age` is set
+You can specify parameters until `smeargle-age-threshold`. `age` is set
 to `smeargle-age-threshold` if actual age of changes is older than
 `smeargle-age-threshold`. Default value of `smeargle-age-threshold` is 7.
 
@@ -87,3 +87,8 @@ to `smeargle-age-threshold` if actual age of changes is older than
 ;; Updating after save buffer
 (add-hook 'after-save-hook 'smeargle)
 ```
+
+[melpa-link]: https://melpa.org/#/smeargle
+[melpa-stable-link]: https://stable.melpa.org/#/smeargle
+[melpa-badge]: https://melpa.org/packages/smeargle-badge.svg
+[melpa-stable-badge]: https://stable.melpa.org/packages/smeargle-badge.svg
