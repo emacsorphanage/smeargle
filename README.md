@@ -12,7 +12,11 @@ This is Emacs port of Vim's [smeargle](https://github.com/FriedSock/smeargle)
 
 ## Installation
 
-You can install `smeargle` from [MELPA](https://melpa.org/) with package.el.
+`smeargle` is available on [MELPA](https://melpa.org/) and [MELPA stable](https://stable.melpa.org/)
+
+You can install `smeargle` with the following command.
+
+<kbd>M-x package-install [RET] smeargle [RET]</kbd>
 
 
 ## Support VCS
