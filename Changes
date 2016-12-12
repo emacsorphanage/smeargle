@@ -1,5 +1,8 @@
 Revision history for smeargle.el
 
+Revision 0.03 2016/12/13 syohex
+   - Drop Emacs 24.1 and 24.2 support
+
 Revision 0.02 2014/11/1 syohex
    - Fix for tramp
 
