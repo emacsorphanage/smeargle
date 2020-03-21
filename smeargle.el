@@ -131,7 +131,7 @@
             (forward-line (- end-line start-line))
             (setq curline end-line)
             (let ((ov (make-overlay start (point))))
-              (overlay-put ov 'face `(:background ,color))
+              (overlay-put ov 'face `(:background ,color :extend t))
               (overlay-put ov 'smeargle t))))))))
 
 (defun smeargle--blame-command (repo-type)

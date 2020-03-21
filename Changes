@@ -1,5 +1,8 @@
 Revision history for smeargle.el
 
+Latest snapshot on MELPA:
+   - Fix highlighting issue on Emacs 27 
+
 Revision 0.03 2016/12/13 syohex
    - Drop Emacs 24.1 and 24.2 support
 
