@@ -179,7 +179,7 @@
            (smeargle--highlight update-info curbuf colors)
            (kill-buffer proc-buf)))))))
 
-(defsubst smergle--process-buffer (bufname)
+(defsubst smeargle--process-buffer (bufname)
   (get-buffer-create (format " *smeargle-%s*" bufname)))
 
 (defsubst smeargle--repo-type ()
@@ -204,7 +204,7 @@
     (unless repo-type
       (user-error "Here is not 'git' or 'mercurial' repository"))
     (smeargle--start-blame-process
-     repo-type (smergle--process-buffer (buffer-file-name))
+     repo-type (smeargle--process-buffer (buffer-file-name))
      (or update-type 'by-time))))
 
 ;;;###autoload
