@@ -1,9 +1,10 @@
 ;;; smeargle.el --- Highlighting region by last updated time -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016 by Syohei YOSHIDA
+;; Copyright (C) 2016-2020 Syohei YOSHIDA and Neil Okamoto
 
 ;; Author: Syohei YOSHIDA <syohex@gmail.com>
-;; URL: https://github.com/syohex/emacs-smeargle
+;; Maintainer: Neil Okamoto <neil.okamoto+melpa@gmail.com>
+;; URL: https://github.com/emacsorphanage/smeargle
 ;; Version: 0.03
 ;; Package-Requires: ((emacs "24.3"))
 
@@ -22,9 +23,9 @@
 
 ;;; Commentary:
 
-;; `smeargle' is Emacs port of Vim's smeargle. `smeargle' provides highlighting
-;; regions by last update time / age of commits. We can know which part is changed
-;; recently and which part is not changed recently.
+;; `smeargle' is an Emacs port of Vim's smeargle.  `smeargle'
+;; highlights lines in a buffer by the last update time / age of last
+;; commit as a visual indication which parts have been changed recently.
 
 ;;; Code:
 
@@ -61,7 +62,7 @@
                        (string :tag "Background color name"))))
 
 (defcustom smeargle-age-threshold 7
-  "Threshould of age of changes"
+  "Threshould of age of changes."
   :type 'integer)
 
 (defun smeargle--updated-era (now updated-date)
@@ -107,7 +108,8 @@
                  (update-era (funcall retrieve-fn now updated-date)))
             (when (and (not last-update) update-era)
               (setq start curline last-update update-era))
-            (when (and last-update (not (funcall cmp-fn last-update update-era)))
+            (when (and last-update
+                       (not (funcall cmp-fn last-update update-era)))
               (push (list :start start :end (1- curline) :when last-update)
                     update-info)
               (setq start curline last-update update-era))
@@ -216,3 +218,8 @@
 (provide 'smeargle)
 
 ;;; smeargle.el ends here
+
+;; Local Variables:
+;; fill-column: 80
+;; indent-tabs-mode: nil
+;; End:

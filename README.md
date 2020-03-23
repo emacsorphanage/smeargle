@@ -1,7 +1,11 @@
-# smeargle.el [![melpa badge][melpa-badge]][melpa-link] [![melpa stable badge][melpa-stable-badge]][melpa-stable-link]
+# smeargle.el
 
-Highlighting regions by last updated time.
-Older updated region is highlighted whity, newer region is highlighted blackly.
+[![melpa badge][melpa-badge]][melpa-link]
+[![melpa stable badge][melpa-stable-badge]][melpa-stable-link]
+[![circleci badge][circleci-badge]][circleci-link]
+
+Highlight regions of a buffer based on the time of most recent update.
+Older updated region is highlighted lighter, newer region is highlighted darker.
 
 This is Emacs port of Vim's [smeargle](https://github.com/FriedSock/smeargle)
 
@@ -94,5 +98,7 @@ to `smeargle-age-threshold` if actual age of changes is older than
 
 [melpa-link]: https://melpa.org/#/smeargle
 [melpa-stable-link]: https://stable.melpa.org/#/smeargle
+[circleci-link]: https://app.circleci.com/pipelines/github/emacsorphanage/smeargle
 [melpa-badge]: https://melpa.org/packages/smeargle-badge.svg
 [melpa-stable-badge]: https://stable.melpa.org/packages/smeargle-badge.svg
+[circleci-badge]: https://img.shields.io/circleci/project/github/emacsorphanage/smeargle.svg
