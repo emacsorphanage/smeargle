@@ -2,7 +2,7 @@
 
 [![melpa badge][melpa-badge]][melpa-link]
 [![melpa stable badge][melpa-stable-badge]][melpa-stable-link]
-[![circleci badge][circleci-badge]][circleci-link]
+[![gh actions badge][gh-actions-badge]][gh-actions-link]
 
 Highlight regions of a buffer based on the time of most recent update.
 Older updated region is highlighted lighter, newer region is highlighted darker.
@@ -98,7 +98,7 @@ to `smeargle-age-threshold` if actual age of changes is older than
 
 [melpa-link]: https://melpa.org/#/smeargle
 [melpa-stable-link]: https://stable.melpa.org/#/smeargle
-[circleci-link]: https://app.circleci.com/pipelines/github/emacsorphanage/smeargle
+[gh-actions-link]: https://github.com/emacsorphanage/smeargle/actions
 [melpa-badge]: https://melpa.org/packages/smeargle-badge.svg
 [melpa-stable-badge]: https://stable.melpa.org/packages/smeargle-badge.svg
-[circleci-badge]: https://img.shields.io/circleci/project/github/emacsorphanage/smeargle.svg
+[gh-actions-badge]: https://github.com/emacsorphanage/smeargle/workflows/ci-checks/badge.svg
